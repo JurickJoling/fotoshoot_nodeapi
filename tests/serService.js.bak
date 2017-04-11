@@ -1,0 +1,189 @@
+
+'use strict';
+// import test from 'ava';
+
+// test('foo', t => {
+// 	t.pass();
+// });
+var config = require('../config');
+
+
+
+var chai = require('chai');
+//var chaiHttp = require('chai-http');
+// var server = require('../server/app');
+var should = chai.should();
+
+var User = require("../app/services/userService");
+var model = require("../app/models/model");
+var MongoClient = require('mongodb').MongoClient;
+
+var db_conn = null;
+
+
+
+describe("Testing User services", function(){
+	const rand = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+	var user_obj = {};
+	//
+	// before(function(done) {
+	// 	MongoClient.connect(config.db, function(err, db) { 
+	//       if(err) { done("Could not connect to DB"); process.exit(); }
+	//
+	//       db_conn = db; 
+	//
+	//       done(); 
+	//     });
+	//	
+	// });
+	//
+
+	it("Should return the user's photos", done => {
+		User.photos('57d2474b52a3ae723bb806a7', {}, function(err, data) {
+
+			console.log(data);
+			done();
+		});
+	})
+
+	it("should return a list of pending users", function (done) {
+		User.find({status :'P'}).then(list => {
+			console.log(list);
+			done();
+		})
+	});
+
+
+	it("Login should fail (user does not exist)", function (done) {
+		User.authenticate({
+			'email': 'NOUSER-test@test.com',
+			'password': 'test@test.com',
+		}).then(function (data) {
+			done(new Error("Found user, didn't expect to find one"));
+		}, function (err) {
+			console.log("ERROR : ", err);
+			done();
+		});
+	});
+
+	it("Login should fail (multiple users with that email)", function (done) {
+		User.authenticate({
+			'email': 'test@test.com',
+			'password': 'test@test.com',
+		}).then(function (data) {
+			done(new Error("Found user, didn't expect to find one"));
+		}, function (data) {
+			console.log("ERROR : ", data);
+			done();
+		});
+	});
+
+	it("Login should fail (bad password)", function (done) {
+		User.authenticate({
+			'email': 'test.101@test.com',
+			'password': 'xxxxxxx',
+		}).then(function (data) {
+			done(new Error("Found user, didn't expect to find one"));
+		}, function (data) {
+			console.log("ERROR : ", data);
+			done();
+		});
+	});
+
+	//
+	// it("Login should succeed", function(done){
+	// 	User.authenticate({
+	// 		'email' : 'cj',
+	// 		'password' : 'leader10',
+	// 	}).then(function(token) {
+	// 		done();
+	// 	}, function(data) {
+	// 		done(data);
+	// 	});
+	// });	
+	//
+
+
+	it("Register should fail (email exists)", function (done) {
+		User.register({
+			'fname': 'test',
+			'lname': 'test',
+			'username': 'test',
+			'email': 'test@test.com',
+			'password': 'test',
+		}).then(function (data) {
+			done(new Error("Should have failed registering user"));
+		}, function(data) {
+			console.log("Error: " + data);
+			done();
+		});
+	});
+
+
+	it("Register succeed registering a user", function (done) {
+		var data = {
+			'email': 'test' + rand + '@test.com',
+			'username': 'user' + rand,
+			'password': 'test',
+			'fname' : 'test' + rand ,
+			'lname' : 'test' + rand ,
+			'account_type': 'model'
+		};
+
+		User.register(data).then(function (data) {
+			console.log(data);
+			done()
+		}, function(error) {
+			done(new Error("Should user be registed"));
+		});
+	});
+
+
+
+	it("Browse users", function (done) {
+		User.browse({
+			account_type : 'model',
+
+		}).then(users => {
+			console.log(users);
+			done();
+		}).catch(err => done(err));
+	});
+
+
+	it("Should return user by Id", done => {
+		User.getById(user_obj._id || "57d2474b52a3ae723bb806a7", {}).then(data => {
+			console.log(data);
+			done();
+		});
+
+	});
+
+	it("should update a user", done => {
+		User.update({
+			details : {
+				fname 	: 'fname',
+				lname 	: 'lname'
+			},
+			_id: '586b4a6477d9c5bcaebe92cf'
+		}).then(data=> {
+			done();
+		}, err => {
+			console.log("ERR", err);
+			done(err);
+		})
+
+	})
+
+	it("should change a password", done => {
+		User.changePassword({
+			id: '58d07721891fe813e972b44f',
+			password: 'admin'
+		}).then(data => {
+			console.log(data.message);
+			done()
+		}, err => {
+			done(new Error("Error: " + err))
+		})
+	})
+});

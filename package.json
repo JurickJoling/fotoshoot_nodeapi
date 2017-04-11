@@ -1,0 +1,65 @@
+{
+  "name": "fotoshoot.api",
+  "version": "1.0.3a",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/userService.js",
+    "dev": "NODE_ENV=development nodemon -L app/server.js",
+    "start": "nodemon -L app/server.js",
+    "production": "nodemon -L app/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjemagid/fotoshoot.api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cjemagid/fotoshoot.api/issues"
+  },
+  "homepage": "https://github.com/cjemagid/fotoshoot.api#readme",
+  "dependencies": {
+    "aws-sdk": "2.7.21",
+    "bcryptjs": "2.4.0",
+    "bluebird": "3.4.7",
+    "body-parser": "1.15.1",
+    "cassandra-driver": "^3.2.0",
+    "chalk": "1.1.3",
+    "colors": "1.1.2",
+    "cors": "2.8.1",
+    "deepmerge": "0.2.10",
+    "dot-object": "1.5.4",
+    "exif": "0.6.0",
+    "express": "4.13.4",
+    "handlebars": "^4.0.6",
+    "image-size": "0.5.1",
+    "isemail": "2.2.1",
+    "jsonwebtoken": "7.2.1",
+    "lodash": "^4.17.4",
+    "mailgun-js": "^0.8.2",
+    "mjml": "^3.3.0",
+    "moment": "2.17.1",
+    "mongodb": "2.2.20",
+    "mongoose": "4.7.6",
+    "mssql": "3.3.0",
+    "multer": "1.2.1",
+    "multer-s3": "2.5.0",
+    "nodemailer": "2.7.0",
+    "nodemon": "1.11.0",
+    "promise": "7.1.1",
+    "pug": "0.1.0",
+    "request": "2.79.0",
+    "sequelize": "3.29.0",
+    "shortid": "^2.2.6",
+    "slugify": "0.1.1",
+    "smtp-connection": "2.12.2",
+    "stripe": "^4.15.0",
+    "swagger-jsdoc": "1.3.1",
+    "uuid": "^2.0.3",
+    "mocha": "~3.2.0"
+  },
+  "devDependencies": {
+    "chai": "3.5.0"
+  }
+}
